@@ -1,332 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Heart, Camera, Sparkles, Clock, ChevronDown } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi San Valentín</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel para traducir JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 
-const App = () => {
-  const [envelopeOpen, setEnvelopeOpen] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-  const [selectedBtn, setSelectedBtn] = useState(null);
-  const [photos, setPhotos] = useState({ photo1: null, photo2: null });
-  const [timeTogether, setTimeTogether] = useState({ years: 0, days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [heartsRain, setHeartsRain] = useState([]);
-
-  const startDate = new Date('2017-02-01T00:00:00');
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const difference = now.getTime() - startDate.getTime();
-
-      const years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365.25));
-      const days = Math.floor((difference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-      setTimeTogether({ years, days, hours, minutes, seconds });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleImageUpload = (e, key) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPhotos((prev) => ({ ...prev, [key]: imageUrl }));
-    }
-  };
-
-  const handleOpenEnvelope = () => {
-    setEnvelopeOpen(true);
-  };
-
-  const handleAccept = (btnIndex) => {
-    setSelectedBtn(btnIndex);
-    setAccepted(true);
-    triggerHeartRain();
-    setTimeout(() => setIsFlipped(true), 1500);
-  };
-
-  const triggerHeartRain = () => {
-    const newHearts = Array.from({ length: 80 }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      animationDuration: Math.random() * 2 + 3,
-      delay: Math.random() * 1,
-      size: Math.random() * 20 + 10,
-      color: ['text-rose-500', 'text-pink-600', 'text-red-500', 'text-rose-400'][Math.floor(Math.random() * 4)]
-    }));
-    setHeartsRain(newHearts);
-  };
-
-  const getButtonClass = (index, baseClass) => {
-    if (!accepted) return baseClass;
-    if (selectedBtn === index) {
-      return "w-full py-4 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-xl shadow-[0_0_30px_rgba(225,29,72,0.6)] scale-110 z-10 transition-all duration-500 font-bold border border-rose-300 ring-2 ring-rose-200 flex items-center justify-center gap-2";
-    }
-    return "w-full py-3 opacity-0 scale-90 transition-all duration-500 hidden";
-  };
-
-  return (
-    <div className="min-h-screen bg-[#fdf2f8] flex items-center justify-center p-4 overflow-hidden relative font-serif">
-      
-      {/* --- BACKGROUND TEXTURE & AMBIENCE --- */}
-      <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" 
-           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` }}>
-      </div>
-      
-      {/* Rose Gold Gradients in Background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-200/40 rounded-full blur-[100px] animate-pulse-slow"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-red-200/30 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-
-      {/* --- FLOATING HEART CLOUDS --- */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[10%] left-[-10%] text-rose-300/40 animate-float-slow">
-          <Heart size={120} fill="currentColor" />
-        </div>
-        <div className="absolute top-[60%] left-[-20%] text-[#d4af37]/20 animate-float-medium" style={{ animationDelay: '2s' }}>
-          <Heart size={180} fill="currentColor" />
-        </div>
-        <div className="absolute top-[30%] left-[-15%] text-pink-300/40 animate-float-fast" style={{ animationDelay: '5s' }}>
-          <Heart size={90} fill="currentColor" />
-        </div>
-        <div className="absolute bottom-[10%] left-[-10%] text-rose-200/50 animate-float-slow" style={{ animationDelay: '1s' }}>
-          <Heart size={150} fill="currentColor" />
-        </div>
-        <div className="absolute top-[15%] right-[-10%] text-[#eecda3]/30 animate-float-reverse-slow">
-          <Heart size={100} fill="currentColor" />
-        </div>
-        <div className="absolute top-[50%] right-[-15%] text-rose-200/40 animate-float-reverse-medium" style={{ animationDelay: '3s' }}>
-          <Heart size={140} fill="currentColor" />
-        </div>
-      </div>
-
-      {/* Lluvia de Corazones (Click) */}
-      {accepted && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden z-[100]">
-          {heartsRain.map((h) => (
-            <div
-              key={h.id}
-              className={`absolute animate-fall ${h.color}`}
-              style={{
-                left: `${h.left}%`,
-                top: '-5%',
-                animationDuration: `${h.animationDuration}s`,
-                animationDelay: `${h.delay}s`,
-              }}
-            >
-              <Heart fill="currentColor" size={h.size} />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* --- ENVELOPE & CARD WRAPPER --- */}
-      <div className={`relative w-full max-w-md md:max-w-xl transition-all duration-1000 z-10 ${envelopeOpen ? 'h-[750px] md:h-[700px]' : 'h-[300px]'}`}>
-        
-        {/* THE ENVELOPE (Visible initially) */}
-        <div 
-          className={`absolute inset-x-0 bottom-0 z-20 transition-all duration-1000 ease-in-out ${envelopeOpen ? 'translate-y-[150%] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
-          onClick={!envelopeOpen ? handleOpenEnvelope : undefined}
-        >
-          {/* Envelope Body */}
-          <div className="relative w-full h-64 bg-rose-100 shadow-xl rounded-b-xl overflow-hidden cursor-pointer group border-2 border-rose-200">
-             {/* Flaps simulation using CSS clip-path or borders */}
-             <div className="absolute inset-0 bg-gradient-to-tr from-rose-200/50 to-transparent"></div>
-             
-             {/* The "V" Shape of the envelope */}
-             <div className="absolute top-0 left-0 w-full h-full border-t-[100px] border-l-[150px] border-r-[150px] border-t-rose-300/20 border-l-rose-100 border-r-rose-100 border-b-0 rounded-b-xl"></div>
-             
-             {/* Wax Seal */}
-             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-                <div className="w-16 h-16 bg-red-700 rounded-full shadow-lg border-4 border-red-800 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Heart className="text-red-200 w-8 h-8" fill="#fecaca" />
-                </div>
-                <span className="mt-4 text-rose-800 font-serif tracking-widest text-sm animate-bounce">TOCA PARA ABRIR</span>
-             </div>
-          </div>
-        </div>
-
-        {/* --- THE LUXURY CARD --- */}
-        <div 
-          className={`relative w-full h-full transition-all duration-[1500ms] ease-out [perspective:1000px] ${envelopeOpen ? 'translate-y-0 opacity-100' : 'translate-y-[200px] opacity-0 scale-90'}`}
-        >
-          <div 
-            className={`relative w-full h-full transition-all duration-1000 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
-          >
-            
-            {/* --- FRONT SIDE (Glassmorphism + Rose Gold) --- */}
-            {/* Added pointer-events check to prevent ghost clicks */}
-            <div className={`absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl ${isFlipped ? 'pointer-events-none' : 'pointer-events-auto'}`}>
-              {/* Glass Background */}
-              <div className="absolute inset-0 bg-white/70 backdrop-blur-xl"></div>
-              
-              {/* Rose Gold Border (Simulated with gradient border wrapper) */}
-              <div className="absolute inset-0 p-[2px] rounded-2xl bg-gradient-to-br from-[#f6d365] via-[#fda085] to-[#f6d365]">
-                <div className="w-full h-full bg-white/90 rounded-[14px] flex flex-col relative overflow-hidden">
-                  
-                  {/* Decorative corner accents */}
-                  <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-rose-200 to-transparent opacity-50 rounded-br-3xl"></div>
-                  <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-rose-200 to-transparent opacity-50 rounded-tl-3xl"></div>
-
-                  {/* Content Container */}
-                  <div className="flex-1 flex flex-col items-center justify-between p-6 md:p-10 z-10">
-                    
-                    <div className="text-center">
-                       <div className="inline-block p-2 rounded-full bg-rose-50 border border-rose-100 mb-4">
-                         <Sparkles className="w-6 h-6 text-[#d4af37]" />
-                       </div>
-                       <h2 className="text-xs font-bold tracking-[0.3em] uppercase text-[#b08d55]">Edición Especial</h2>
-                    </div>
-
-                    <div className="text-center space-y-4 w-full">
-                      <h1 className="text-4xl md:text-6xl text-slate-800 font-serif leading-none">
-                        ¿Quieres ser mi<br />
-                        <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#d68e6e] to-[#d4af37] italic pb-2">
-                          San Valentín?
-                        </span>
-                      </h1>
-
-                      {/* POEM SECTION (Añadido) */}
-                      <div className="py-2">
-                        <p className="text-sm md:text-base text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
-                          "No cuentes los años, cuenta los latidos.<br/>
-                          Porque cada segundo a tu lado,<br/>
-                          tiene todo el sentido."
-                        </p>
-                      </div>
-                      
-                      {/* Premium Counter */}
-                      <div className="py-4 border-t border-b border-rose-100 w-full">
-                        <div className="flex items-center justify-center gap-2 mb-3 text-[#b08d55]">
-                          <Clock size={14} />
-                          <span className="text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-3 text-center font-serif text-slate-700">
-                           <TimeUnit value={timeTogether.years} label="Años" />
-                           <span className="text-rose-300 self-center pb-4">|</span>
-                           <TimeUnit value={timeTogether.days} label="Días" />
-                           <span className="text-rose-300 self-center pb-4">|</span>
-                           <TimeUnit value={timeTogether.hours} label="Hrs" />
-                        </div>
-                        <p className="text-[10px] text-center mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
-                      </div>
-                    </div>
-
-                    <div className="w-full space-y-3">
-                      <button 
-                        onClick={() => handleAccept(0)}
-                        className={getButtonClass(0, "w-full py-3 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2")}
-                      >
-                        <Heart className="w-4 h-4 fill-current" /> ¡Sí, acepto!
-                      </button>
-
-                      <button 
-                        onClick={() => handleAccept(1)}
-                        className={getButtonClass(1, "w-full py-3 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium")}
-                      >
-                        Por supuesto que sí
-                      </button>
-
-                      <button 
-                        onClick={() => handleAccept(2)}
-                        className={getButtonClass(2, "w-full py-3 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium")}
-                      >
-                        ¡Mil veces sí!
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* --- BACK SIDE (Polaroids) --- */}
-            {/* Added pointer-events-auto check so it is only clickable when flipped */}
-            <div className={`absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl overflow-hidden shadow-2xl bg-[#fdfaf6] ${isFlipped ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-              {/* Background Texture again for continuity */}
-               <div className="absolute inset-0 opacity-30 pointer-events-none" 
-                   style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` }}>
-              </div>
-
-              <div className="relative h-full flex flex-col p-6 md:p-10 z-10">
-                 
-                {/* Z-Index raised and cursor-pointer explicitly added */}
-                <button 
-                  onClick={() => setIsFlipped(false)}
-                  className="absolute top-6 left-6 text-[#b08d55] hover:text-[#8a6d3b] transition-colors flex items-center gap-1 text-sm font-bold tracking-widest uppercase z-50 cursor-pointer"
-                >
-                  ← Volver
-                </button>
-
-                <div className="mt-8 text-center">
-                  <h1 className="text-3xl font-serif text-slate-800 italic">Para mi Vida Entera</h1>
-                  <div className="w-16 h-[2px] bg-[#d4af37] mx-auto mt-3"></div>
-                </div>
-
-                {/* POLAROID SECTION */}
-                <div className="flex-1 flex flex-col md:flex-row items-center justify-center relative my-4 gap-8 md:gap-4">
-                  
-                  {/* Polaroid 1 (Tilted Left) */}
-                  <div className="relative group transform -rotate-3 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out">
-                    <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-[180px] md:w-[220px]">
-                      <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
-                        {photos.photo1 ? (
-                          <img src={photos.photo1} alt="Foto 1" className="w-full h-full object-cover" />
-                        ) : (
-                          <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
-                            <Camera size={24} />
-                            <span className="text-[10px] mt-2 uppercase tracking-wide">Clic para subir</span>
-                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'photo1')} />
-                          </label>
-                        )}
-                      </div>
-                      <div className="text-center mt-3 font-handwriting text-gray-500 text-sm transform rotate-1">
-                        Nosotros ❤️
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Polaroid 2 (Tilted Right) */}
-                  <div className="relative group transform rotate-6 translate-y-4 md:translate-y-8 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out">
-                     <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-[180px] md:w-[220px]">
-                      <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
-                        {photos.photo2 ? (
-                          <img src={photos.photo2} alt="Foto 2" className="w-full h-full object-cover" />
-                        ) : (
-                          <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
-                            <Camera size={24} />
-                            <span className="text-[10px] mt-2 uppercase tracking-wide">Clic para subir</span>
-                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'photo2')} />
-                          </label>
-                        )}
-                      </div>
-                      <div className="text-center mt-3 font-handwriting text-gray-500 text-sm transform -rotate-2">
-                        Forever & Always
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* Dedication Note */}
-                <div className="mt-auto bg-white/60 p-6 rounded-sm border-l-4 border-[#d4af37] shadow-sm">
-                  <p className="text-slate-600 font-serif italic text-sm leading-relaxed text-center">
-                    "Desde 2017 has sido mi refugio, mi alegría y mi mayor aventura. Gracias por elegirme cada día. Te amo infinitamente."
-                  </p>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@500&display=swap');
-        
+    <!-- Estilos Personalizados -->
+    <style>
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-handwriting { font-family: 'Dancing Script', cursive; }
 
@@ -368,16 +61,379 @@ const App = () => {
         /* 3D Transform Utilities */
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
-      `}</style>
-    </div>
-  );
-};
+        
+        /* Asegurar click en reverso */
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
 
-const TimeUnit = ({ value, label }) => (
-  <div className="flex flex-col items-center">
-    <span className="text-2xl md:text-3xl font-serif text-slate-800">{value}</span>
-    <span className="text-[9px] text-[#b08d55] uppercase tracking-widest">{label}</span>
-  </div>
-);
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-export default App;
+        // --- ICONOS SVG (Implementados manualmente para evitar dependencias externas) ---
+        const Heart = ({ size = 24, fill = "none", className = "", style={} }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+        );
+
+        const Camera = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                <circle cx="12" cy="13" r="3"/>
+            </svg>
+        );
+
+        const Sparkles = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+        );
+
+        const Clock = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        );
+
+        // --- COMPONENTE PRINCIPAL ---
+        const App = () => {
+            const [envelopeOpen, setEnvelopeOpen] = useState(false);
+            const [isFlipped, setIsFlipped] = useState(false);
+            const [accepted, setAccepted] = useState(false);
+            const [selectedBtn, setSelectedBtn] = useState(null);
+            const [photos, setPhotos] = useState({ photo1: null, photo2: null });
+            const [timeTogether, setTimeTogether] = useState({ years: 0, days: 0, hours: 0, minutes: 0, seconds: 0 });
+            const [heartsRain, setHeartsRain] = useState([]);
+
+            const startDate = new Date('2017-02-01T00:00:00');
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    const now = new Date();
+                    const difference = now.getTime() - startDate.getTime();
+
+                    const years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365.25));
+                    const days = Math.floor((difference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                    setTimeTogether({ years, days, hours, minutes, seconds });
+                }, 1000);
+
+                return () => clearInterval(timer);
+            }, []);
+
+            const handleImageUpload = (e, key) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    setPhotos((prev) => ({ ...prev, [key]: imageUrl }));
+                }
+            };
+
+            const handleOpenEnvelope = () => {
+                setEnvelopeOpen(true);
+            };
+
+            const handleAccept = (btnIndex) => {
+                setSelectedBtn(btnIndex);
+                setAccepted(true);
+                triggerHeartRain();
+                setTimeout(() => setIsFlipped(true), 1500);
+            };
+
+            const triggerHeartRain = () => {
+                const newHearts = Array.from({ length: 80 }).map((_, i) => ({
+                    id: i,
+                    left: Math.random() * 100,
+                    animationDuration: Math.random() * 2 + 3,
+                    delay: Math.random() * 1,
+                    size: Math.random() * 20 + 10,
+                    color: ['text-rose-500', 'text-pink-600', 'text-red-500', 'text-rose-400'][Math.floor(Math.random() * 4)]
+                }));
+                setHeartsRain(newHearts);
+            };
+
+            const getButtonClass = (index, baseClass) => {
+                if (!accepted) return baseClass;
+                if (selectedBtn === index) {
+                    return "w-full py-4 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-xl shadow-[0_0_30px_rgba(225,29,72,0.6)] scale-110 z-10 transition-all duration-500 font-bold border border-rose-300 ring-2 ring-rose-200 flex items-center justify-center gap-2";
+                }
+                return "w-full py-3 opacity-0 scale-90 transition-all duration-500 hidden";
+            };
+
+            return (
+                <div className="min-h-screen bg-[#fdf2f8] flex items-center justify-center p-4 overflow-hidden relative font-serif">
+                
+                {/* --- BACKGROUND TEXTURE & AMBIENCE --- */}
+                <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" 
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` }}>
+                </div>
+                
+                {/* Rose Gold Gradients in Background */}
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-200/40 rounded-full blur-[100px] animate-pulse-slow"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-red-200/30 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+
+                {/* --- FLOATING HEART CLOUDS --- */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                    <div className="absolute top-[10%] left-[-10%] text-rose-300/40 animate-float-slow">
+                    <Heart size={120} fill="currentColor" />
+                    </div>
+                    <div className="absolute top-[60%] left-[-20%] text-[#d4af37]/20 animate-float-medium" style={{ animationDelay: '2s' }}>
+                    <Heart size={180} fill="currentColor" />
+                    </div>
+                    <div className="absolute top-[30%] left-[-15%] text-pink-300/40 animate-float-fast" style={{ animationDelay: '5s' }}>
+                    <Heart size={90} fill="currentColor" />
+                    </div>
+                    <div className="absolute bottom-[10%] left-[-10%] text-rose-200/50 animate-float-slow" style={{ animationDelay: '1s' }}>
+                    <Heart size={150} fill="currentColor" />
+                    </div>
+                    <div className="absolute top-[15%] right-[-10%] text-[#eecda3]/30 animate-float-reverse-slow">
+                    <Heart size={100} fill="currentColor" />
+                    </div>
+                    <div className="absolute top-[50%] right-[-15%] text-rose-200/40 animate-float-reverse-medium" style={{ animationDelay: '3s' }}>
+                    <Heart size={140} fill="currentColor" />
+                    </div>
+                </div>
+
+                {/* Lluvia de Corazones (Click) */}
+                {accepted && (
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-[100]">
+                    {heartsRain.map((h) => (
+                        <div
+                        key={h.id}
+                        className={`absolute animate-fall ${h.color}`}
+                        style={{
+                            left: `${h.left}%`,
+                            top: '-5%',
+                            animationDuration: `${h.animationDuration}s`,
+                            animationDelay: `${h.delay}s`,
+                        }}
+                        >
+                        <Heart fill="currentColor" size={h.size} />
+                        </div>
+                    ))}
+                    </div>
+                )}
+
+                {/* --- ENVELOPE & CARD WRAPPER --- */}
+                <div className={`relative w-full max-w-md md:max-w-xl transition-all duration-1000 z-10 ${envelopeOpen ? 'h-[750px] md:h-[700px]' : 'h-[300px]'}`}>
+                    
+                    {/* THE ENVELOPE (Visible initially) */}
+                    <div 
+                    className={`absolute inset-x-0 bottom-0 z-20 transition-all duration-1000 ease-in-out ${envelopeOpen ? 'translate-y-[150%] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
+                    onClick={!envelopeOpen ? handleOpenEnvelope : undefined}
+                    >
+                    {/* Envelope Body */}
+                    <div className="relative w-full h-64 bg-rose-100 shadow-xl rounded-b-xl overflow-hidden cursor-pointer group border-2 border-rose-200">
+                        {/* Flaps simulation using CSS clip-path or borders */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-rose-200/50 to-transparent"></div>
+                        
+                        {/* The "V" Shape of the envelope */}
+                        <div className="absolute top-0 left-0 w-full h-full border-t-[100px] border-l-[150px] border-r-[150px] border-t-rose-300/20 border-l-rose-100 border-r-rose-100 border-b-0 rounded-b-xl"></div>
+                        
+                        {/* Wax Seal */}
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
+                            <div className="w-16 h-16 bg-red-700 rounded-full shadow-lg border-4 border-red-800 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <Heart className="text-red-200 w-8 h-8" fill="#fecaca" />
+                            </div>
+                            <span className="mt-4 text-rose-800 font-serif tracking-widest text-sm animate-bounce">TOCA PARA ABRIR</span>
+                        </div>
+                    </div>
+                    </div>
+
+                    {/* --- THE LUXURY CARD --- */}
+                    <div 
+                    className={`relative w-full h-full transition-all duration-[1500ms] ease-out [perspective:1000px] ${envelopeOpen ? 'translate-y-0 opacity-100' : 'translate-y-[200px] opacity-0 scale-90'}`}
+                    >
+                    <div 
+                        className={`relative w-full h-full transition-all duration-1000 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
+                    >
+                        
+                        {/* --- FRONT SIDE (Glassmorphism + Rose Gold) --- */}
+                        <div className={`absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl ${isFlipped ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+                        {/* Glass Background */}
+                        <div className="absolute inset-0 bg-white/70 backdrop-blur-xl"></div>
+                        
+                        {/* Rose Gold Border */}
+                        <div className="absolute inset-0 p-[2px] rounded-2xl bg-gradient-to-br from-[#f6d365] via-[#fda085] to-[#f6d365]">
+                            <div className="w-full h-full bg-white/90 rounded-[14px] flex flex-col relative overflow-hidden">
+                            
+                            {/* Decorative corner accents */}
+                            <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-rose-200 to-transparent opacity-50 rounded-br-3xl"></div>
+                            <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-rose-200 to-transparent opacity-50 rounded-tl-3xl"></div>
+
+                            {/* Content Container */}
+                            <div className="flex-1 flex flex-col items-center justify-between p-6 md:p-10 z-10">
+                                
+                                <div className="text-center">
+                                <div className="inline-block p-2 rounded-full bg-rose-50 border border-rose-100 mb-4">
+                                    <Sparkles className="w-6 h-6 text-[#d4af37]" />
+                                </div>
+                                <h2 className="text-xs font-bold tracking-[0.3em] uppercase text-[#b08d55]">Edición Especial</h2>
+                                </div>
+
+                                <div className="text-center space-y-4 w-full">
+                                <h1 className="text-4xl md:text-6xl text-slate-800 font-serif leading-none">
+                                    ¿Quieres ser mi<br />
+                                    <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#d68e6e] to-[#d4af37] italic pb-2">
+                                    San Valentín?
+                                    </span>
+                                </h1>
+
+                                {/* POEM SECTION */}
+                                <div className="py-2">
+                                    <p className="text-sm md:text-base text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
+                                    "No cuentes los años, cuenta los latidos.<br/>
+                                    Porque cada segundo a tu lado,<br/>
+                                    tiene todo el sentido."
+                                    </p>
+                                </div>
+                                
+                                {/* Premium Counter */}
+                                <div className="py-4 border-t border-b border-rose-100 w-full">
+                                    <div className="flex items-center justify-center gap-2 mb-3 text-[#b08d55]">
+                                    <Clock size={14} />
+                                    <span className="text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
+                                    </div>
+                                    <div className="flex flex-wrap justify-center gap-3 text-center font-serif text-slate-700">
+                                    <TimeUnit value={timeTogether.years} label="Años" />
+                                    <span className="text-rose-300 self-center pb-4">|</span>
+                                    <TimeUnit value={timeTogether.days} label="Días" />
+                                    <span className="text-rose-300 self-center pb-4">|</span>
+                                    <TimeUnit value={timeTogether.hours} label="Hrs" />
+                                    </div>
+                                    <p className="text-[10px] text-center mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
+                                </div>
+                                </div>
+
+                                <div className="w-full space-y-3">
+                                <button 
+                                    onClick={() => handleAccept(0)}
+                                    className={getButtonClass(0, "w-full py-3 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2")}
+                                >
+                                    <Heart className="w-4 h-4 fill-current" /> ¡Sí, acepto!
+                                </button>
+
+                                <button 
+                                    onClick={() => handleAccept(1)}
+                                    className={getButtonClass(1, "w-full py-3 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium")}
+                                >
+                                    Por supuesto que sí
+                                </button>
+
+                                <button 
+                                    onClick={() => handleAccept(2)}
+                                    className={getButtonClass(2, "w-full py-3 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium")}
+                                >
+                                    ¡Mil veces sí!
+                                </button>
+                                </div>
+
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        {/* --- BACK SIDE (Polaroids) --- */}
+                        <div className={`absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl overflow-hidden shadow-2xl bg-[#fdfaf6] ${isFlipped ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+                        {/* Background Texture */}
+                        <div className="absolute inset-0 opacity-30 pointer-events-none" 
+                            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` }}>
+                        </div>
+
+                        <div className="relative h-full flex flex-col p-6 md:p-10 z-10">
+                            
+                            <button 
+                            onClick={() => setIsFlipped(false)}
+                            className="absolute top-6 left-6 text-[#b08d55] hover:text-[#8a6d3b] transition-colors flex items-center gap-1 text-sm font-bold tracking-widest uppercase z-50 cursor-pointer"
+                            >
+                            ← Volver
+                            </button>
+
+                            <div className="mt-8 text-center">
+                            <h1 className="text-3xl font-serif text-slate-800 italic">Para mi Vida Entera</h1>
+                            <div className="w-16 h-[2px] bg-[#d4af37] mx-auto mt-3"></div>
+                            </div>
+
+                            {/* POLAROID SECTION */}
+                            <div className="flex-1 flex flex-col md:flex-row items-center justify-center relative my-4 gap-8 md:gap-4">
+                            
+                            {/* Polaroid 1 */}
+                            <div className="relative group transform -rotate-3 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out">
+                                <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-[180px] md:w-[220px]">
+                                <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
+                                    {photos.photo1 ? (
+                                    <img src={photos.photo1} alt="Foto 1" className="w-full h-full object-cover" />
+                                    ) : (
+                                    <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
+                                        <Camera size={24} />
+                                        <span className="text-[10px] mt-2 uppercase tracking-wide">Clic para subir</span>
+                                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'photo1')} />
+                                    </label>
+                                    )}
+                                </div>
+                                <div className="text-center mt-3 font-handwriting text-gray-500 text-sm transform rotate-1">
+                                    Nosotros ❤️
+                                </div>
+                                </div>
+                            </div>
+
+                            {/* Polaroid 2 */}
+                            <div className="relative group transform rotate-6 translate-y-4 md:translate-y-8 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out">
+                                <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-[180px] md:w-[220px]">
+                                <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
+                                    {photos.photo2 ? (
+                                    <img src={photos.photo2} alt="Foto 2" className="w-full h-full object-cover" />
+                                    ) : (
+                                    <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
+                                        <Camera size={24} />
+                                        <span className="text-[10px] mt-2 uppercase tracking-wide">Clic para subir</span>
+                                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'photo2')} />
+                                    </label>
+                                    )}
+                                </div>
+                                <div className="text-center mt-3 font-handwriting text-gray-500 text-sm transform -rotate-2">
+                                    Forever & Always
+                                </div>
+                                </div>
+                            </div>
+
+                            </div>
+
+                            {/* Dedication Note */}
+                            <div className="mt-auto bg-white/60 p-6 rounded-sm border-l-4 border-[#d4af37] shadow-sm">
+                            <p className="text-slate-600 font-serif italic text-sm leading-relaxed text-center">
+                                "Desde 2017 has sido mi refugio, mi alegría y mi mayor aventura. Gracias por elegirme cada día. Te amo infinitamente."
+                            </p>
+                            </div>
+
+                        </div>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+
+                </div>
+            );
+        };
+
+        const TimeUnit = ({ value, label }) => (
+            <div className="flex flex-col items-center">
+                <span className="text-2xl md:text-3xl font-serif text-slate-800">{value}</span>
+                <span className="text-[9px] text-[#b08d55] uppercase tracking-widest">{label}</span>
+            </div>
+        );
+
+        // Renderizar la App
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
