@@ -105,7 +105,14 @@
             const [isFlipped, setIsFlipped] = useState(false);
             const [accepted, setAccepted] = useState(false);
             const [selectedBtn, setSelectedBtn] = useState(null);
-            const [photos, setPhotos] = useState({ photo1: null, photo2: null });
+            
+            // --- CONFIGURACIÓN DE FOTOS ---
+            // Sube tus fotos a GitHub con estos nombres exactos o cambia las URLs aquí.
+            // Si el archivo no existe, aparecerá el botón para subirla manualmente.
+            const INITIAL_PHOTO_1 = "./foto1.jpg";
+            const INITIAL_PHOTO_2 = "./foto2.jpg";
+
+            const [photos, setPhotos] = useState({ photo1: INITIAL_PHOTO_1, photo2: INITIAL_PHOTO_2 });
             const [timeTogether, setTimeTogether] = useState({ years: 0, days: 0, hours: 0, minutes: 0, seconds: 0 });
             const [heartsRain, setHeartsRain] = useState([]);
 
@@ -134,6 +141,11 @@
                     const imageUrl = URL.createObjectURL(file);
                     setPhotos((prev) => ({ ...prev, [key]: imageUrl }));
                 }
+            };
+            
+            const handleImageError = (key) => {
+                // Si la imagen predefinida falla (no existe en github), volvemos al estado null para mostrar el botón de subida
+                setPhotos((prev) => ({ ...prev, [key]: null }));
             };
 
             const handleOpenEnvelope = () => {
@@ -369,7 +381,12 @@
                                 <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-full md:w-[220px]">
                                 <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
                                     {photos.photo1 ? (
-                                    <img src={photos.photo1} alt="Foto 1" className="w-full h-full object-cover" />
+                                    <img 
+                                        src={photos.photo1} 
+                                        alt="Foto 1" 
+                                        className="w-full h-full object-cover" 
+                                        onError={() => handleImageError('photo1')}
+                                    />
                                     ) : (
                                     <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
                                         <Camera size={24} />
@@ -389,7 +406,12 @@
                                 <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-full md:w-[220px]">
                                 <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
                                     {photos.photo2 ? (
-                                    <img src={photos.photo2} alt="Foto 2" className="w-full h-full object-cover" />
+                                    <img 
+                                        src={photos.photo2} 
+                                        alt="Foto 2" 
+                                        className="w-full h-full object-cover" 
+                                        onError={() => handleImageError('photo2')}
+                                    />
                                     ) : (
                                     <label className="flex flex-col items-center justify-center h-full text-gray-400 hover:text-rose-400 transition-colors">
                                         <Camera size={24} />
