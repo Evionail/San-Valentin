@@ -187,13 +187,15 @@
             };
 
             // Estilos dinámicos para el contenedor de la carta
-            // En móvil usamos max-h-[80vh] para respetar tu regla del 80%
+            // FIX: Usamos [85dvh] (Dynamic Viewport Height) para que ignore la barra del navegador
+            // FIX: Ancho [95vw] para casi tocar los bordes laterales
             const cardContainerStyle = envelopeOpen 
-                ? "h-[75vh] min-h-[580px] md:h-[700px] w-[92vw] md:w-full md:max-w-xl" 
+                ? "h-[85dvh] min-h-[580px] md:h-[700px] w-[95vw] md:w-full md:max-w-xl" 
                 : "h-[300px] w-[90vw] md:w-full md:max-w-xl";
 
             return (
-                <div className="min-h-screen bg-[#fdf2f8] flex items-center justify-center p-0 md:p-4 overflow-hidden relative font-serif">
+                // FIX: h-[100dvh] en el contenedor padre para asegurar que ocupe TODA la pantalla visible real
+                <div className="h-[100dvh] bg-[#fdf2f8] flex items-center justify-center p-0 md:p-4 overflow-hidden relative font-serif">
                 
                 {/* --- BACKGROUND TEXTURE & AMBIENCE --- */}
                 <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" 
@@ -247,7 +249,6 @@
                 )}
 
                 {/* --- ENVELOPE & CARD WRAPPER --- */}
-                {/* CAMBIO IMPORTANTE: Ancho 92vw para ganar espacio lateral y min-h para evitar aplastamiento */}
                 <div className={`relative transition-all duration-1000 z-10 ${cardContainerStyle}`}>
                     
                     {/* THE ENVELOPE (Visible initially) */}
@@ -295,27 +296,28 @@
                             <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-rose-200 to-transparent opacity-50 rounded-tl-3xl"></div>
 
                             {/* Content Container - Flex ajustado para distribuir mejor */}
-                            <div className="flex-1 flex flex-col items-center justify-between py-4 px-3 md:p-10 z-10 overflow-y-auto no-scrollbar">
+                            <div className="flex-1 flex flex-col items-center justify-between py-6 px-4 md:p-10 z-10 overflow-y-auto no-scrollbar">
                                 
                                 <div className="text-center flex-shrink-0">
                                 <div className="inline-block p-2 rounded-full bg-rose-50 border border-rose-100 mb-1 md:mb-2">
                                     <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-[#d4af37]" />
                                 </div>
-                                <h2 className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#b08d55]">Edición Especial</h2>
+                                <h2 className="text-xs md:text-xs font-bold tracking-[0.3em] uppercase text-[#b08d55]">Edición Especial</h2>
                                 </div>
 
-                                <div className="text-center w-full flex-grow flex flex-col justify-center gap-2 md:gap-4">
-                                {/* TEXTO ADAPTABLE: Tamaño ajustado para evitar saltos de línea extraños */}
-                                <h1 className="text-[28px] md:text-6xl text-slate-800 font-serif leading-none">
+                                <div className="text-center w-full flex-grow flex flex-col justify-center gap-4 md:gap-4">
+                                {/* TEXTO ADAPTABLE: Tamaño AUMENTADO (4xl en móvil) */}
+                                <h1 className="text-4xl md:text-6xl text-slate-800 font-serif leading-none">
                                     ¿Quieres ser mi<br />
-                                    <span className="block mt-1 md:mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#d68e6e] to-[#d4af37] italic pb-2">
+                                    <span className="block mt-2 md:mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#d68e6e] to-[#d4af37] italic pb-2">
                                     San Valentín?
                                     </span>
                                 </h1>
 
                                 {/* POEM SECTION */}
-                                <div className="py-1">
-                                    <p className="text-xs md:text-lg text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
+                                <div className="py-2">
+                                    {/* Texto AUMENTADO (text-sm en móvil) */}
+                                    <p className="text-sm md:text-lg text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
                                     "No cuentes los años, cuenta los latidos.<br/>
                                     Porque cada segundo a tu lado,<br/>
                                     tiene todo el sentido."
@@ -323,10 +325,10 @@
                                 </div>
                                 
                                 {/* Premium Counter - Compacto en móvil */}
-                                <div className="py-2 md:py-4 border-t border-b border-rose-100 w-full">
-                                    <div className="flex items-center justify-center gap-2 mb-1 md:mb-3 text-[#b08d55]">
+                                <div className="py-3 md:py-4 border-t border-b border-rose-100 w-full">
+                                    <div className="flex items-center justify-center gap-2 mb-2 md:mb-3 text-[#b08d55]">
                                     <Clock size={12} className="md:w-4 md:h-4" />
-                                    <span className="text-[9px] md:text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
+                                    <span className="text-[10px] md:text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-2 md:gap-3 text-center font-serif text-slate-700">
                                     <TimeUnit value={timeTogether.years} label="Años" />
@@ -335,29 +337,29 @@
                                     <span className="text-rose-300 self-center pb-2 md:pb-4 text-xs">|</span>
                                     <TimeUnit value={timeTogether.hours} label="Hrs" />
                                     </div>
-                                    <p className="text-[8px] md:text-[10px] text-center mt-1 md:mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
+                                    <p className="text-[9px] md:text-[10px] text-center mt-2 md:mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
                                 </div>
                                 </div>
 
-                                {/* Botones más compactos en móvil (py-2 en vez de py-3) */}
-                                <div className="w-full space-y-2 mt-2 flex-shrink-0">
+                                {/* Botones más visibles */}
+                                <div className="w-full space-y-3 mt-4 flex-shrink-0">
                                 <button 
                                     onClick={() => handleAccept(0)}
-                                    className={getButtonClass(0, "w-full py-2.5 md:py-4 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2 text-sm md:text-base")}
+                                    className={getButtonClass(0, "w-full py-3.5 md:py-4 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2 text-base md:text-base")}
                                 >
-                                    <Heart className="w-4 h-4 md:w-5 md:h-5 fill-current" /> ¡Sí, acepto!
+                                    <Heart className="w-5 h-5 md:w-5 md:h-5 fill-current" /> ¡Sí, acepto!
                                 </button>
 
                                 <button 
                                     onClick={() => handleAccept(1)}
-                                    className={getButtonClass(1, "w-full py-2.5 md:py-4 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium text-sm md:text-base")}
+                                    className={getButtonClass(1, "w-full py-3.5 md:py-4 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium text-base md:text-base")}
                                 >
                                     Por supuesto que sí
                                 </button>
 
                                 <button 
                                     onClick={() => handleAccept(2)}
-                                    className={getButtonClass(2, "w-full py-2.5 md:py-4 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium text-sm md:text-base")}
+                                    className={getButtonClass(2, "w-full py-3.5 md:py-4 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium text-base md:text-base")}
                                 >
                                     ¡Mil veces sí!
                                 </button>
