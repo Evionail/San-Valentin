@@ -232,8 +232,8 @@
                 )}
 
                 {/* --- ENVELOPE & CARD WRAPPER --- */}
-                {/* Modificación clave: w-[95vw] para forzar ancho y h-[90vh] para forzar altura en móviles */}
-                <div className={`relative w-[95vw] md:w-full md:max-w-xl transition-all duration-1000 z-10 ${envelopeOpen ? 'h-[90vh] md:h-[700px]' : 'h-[300px]'}`}>
+                {/* AJUSTE MÓVIL CRÍTICO: Ancho 85vw y Altura dinámica (dvh) para evitar recortes */}
+                <div className={`relative w-[85vw] md:w-full md:max-w-xl transition-all duration-1000 z-10 ${envelopeOpen ? 'h-[85vh] md:h-[700px]' : 'h-[300px]'}`}>
                     
                     {/* THE ENVELOPE (Visible initially) */}
                     <div 
@@ -280,17 +280,18 @@
                             <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-rose-200 to-transparent opacity-50 rounded-tl-3xl"></div>
 
                             {/* Content Container */}
-                            <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-10 z-10">
+                            <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-10 z-10 overflow-y-auto md:overflow-hidden">
                                 
                                 <div className="text-center">
-                                <div className="inline-block p-2 rounded-full bg-rose-50 border border-rose-100 mb-2 md:mb-4">
-                                    <Sparkles className="w-6 h-6 text-[#d4af37]" />
+                                <div className="inline-block p-2 rounded-full bg-rose-50 border border-rose-100 mb-2">
+                                    <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-[#d4af37]" />
                                 </div>
                                 <h2 className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#b08d55]">Edición Especial</h2>
                                 </div>
 
                                 <div className="text-center space-y-2 md:space-y-4 w-full">
-                                <h1 className="text-5xl md:text-6xl text-slate-800 font-serif leading-none">
+                                {/* TEXTO ADAPTABLE: Más pequeño en móvil para que quepa todo */}
+                                <h1 className="text-3xl md:text-6xl text-slate-800 font-serif leading-none">
                                     ¿Quieres ser mi<br />
                                     <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#d68e6e] to-[#d4af37] italic pb-2">
                                     San Valentín?
@@ -298,49 +299,49 @@
                                 </h1>
 
                                 {/* POEM SECTION */}
-                                <div className="py-2">
-                                    <p className="text-base md:text-lg text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
+                                <div className="py-1 md:py-2">
+                                    <p className="text-xs md:text-lg text-slate-600 font-serif italic max-w-xs mx-auto leading-relaxed">
                                     "No cuentes los años, cuenta los latidos.<br/>
                                     Porque cada segundo a tu lado,<br/>
                                     tiene todo el sentido."
                                     </p>
                                 </div>
                                 
-                                {/* Premium Counter */}
-                                <div className="py-4 border-t border-b border-rose-100 w-full">
-                                    <div className="flex items-center justify-center gap-2 mb-3 text-[#b08d55]">
-                                    <Clock size={14} />
-                                    <span className="text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
+                                {/* Premium Counter - Compacto en móvil */}
+                                <div className="py-2 md:py-4 border-t border-b border-rose-100 w-full">
+                                    <div className="flex items-center justify-center gap-2 mb-2 md:mb-3 text-[#b08d55]">
+                                    <Clock size={12} className="md:w-4 md:h-4" />
+                                    <span className="text-[9px] md:text-[10px] font-bold tracking-widest uppercase">Tiempo de Nuestro Amor</span>
                                     </div>
-                                    <div className="flex flex-wrap justify-center gap-3 text-center font-serif text-slate-700">
+                                    <div className="flex flex-wrap justify-center gap-2 md:gap-3 text-center font-serif text-slate-700">
                                     <TimeUnit value={timeTogether.years} label="Años" />
-                                    <span className="text-rose-300 self-center pb-4">|</span>
+                                    <span className="text-rose-300 self-center pb-2 md:pb-4 text-xs">|</span>
                                     <TimeUnit value={timeTogether.days} label="Días" />
-                                    <span className="text-rose-300 self-center pb-4">|</span>
+                                    <span className="text-rose-300 self-center pb-2 md:pb-4 text-xs">|</span>
                                     <TimeUnit value={timeTogether.hours} label="Hrs" />
                                     </div>
-                                    <p className="text-[10px] text-center mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
+                                    <p className="text-[8px] md:text-[10px] text-center mt-2 md:mt-3 text-slate-400 uppercase tracking-widest">Desde Feb 1, 2017</p>
                                 </div>
                                 </div>
 
-                                <div className="w-full space-y-3">
+                                <div className="w-full space-y-2 md:space-y-3">
                                 <button 
                                     onClick={() => handleAccept(0)}
-                                    className={getButtonClass(0, "w-full py-4 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2")}
+                                    className={getButtonClass(0, "w-full py-3 md:py-4 bg-gradient-to-r from-[#fda085] to-[#f6d365] text-white rounded-xl shadow-lg hover:shadow-[#fda085]/40 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide flex items-center justify-center gap-2 text-sm md:text-base")}
                                 >
-                                    <Heart className="w-5 h-5 fill-current" /> ¡Sí, acepto!
+                                    <Heart className="w-4 h-4 md:w-5 md:h-5 fill-current" /> ¡Sí, acepto!
                                 </button>
 
                                 <button 
                                     onClick={() => handleAccept(1)}
-                                    className={getButtonClass(1, "w-full py-4 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium")}
+                                    className={getButtonClass(1, "w-full py-3 md:py-4 bg-white border border-[#eecda3] text-[#d68e6e] rounded-xl hover:bg-orange-50 transition-all duration-300 font-medium text-sm md:text-base")}
                                 >
                                     Por supuesto que sí
                                 </button>
 
                                 <button 
                                     onClick={() => handleAccept(2)}
-                                    className={getButtonClass(2, "w-full py-4 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium")}
+                                    className={getButtonClass(2, "w-full py-3 md:py-4 bg-white border border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-all duration-300 font-medium text-sm md:text-base")}
                                 >
                                     ¡Mil veces sí!
                                 </button>
@@ -362,21 +363,21 @@
                             
                             <button 
                             onClick={() => setIsFlipped(false)}
-                            className="absolute top-4 left-4 md:top-6 md:left-6 text-[#b08d55] hover:text-[#8a6d3b] transition-colors flex items-center gap-1 text-sm font-bold tracking-widest uppercase z-50 cursor-pointer"
+                            className="absolute top-4 left-4 md:top-6 md:left-6 text-[#b08d55] hover:text-[#8a6d3b] transition-colors flex items-center gap-1 text-xs md:text-sm font-bold tracking-widest uppercase z-50 cursor-pointer"
                             >
                             ← Volver
                             </button>
 
                             <div className="mt-8 text-center flex-shrink-0">
-                            <h1 className="text-3xl md:text-3xl font-serif text-slate-800 italic">Para mi Vida Entera</h1>
+                            <h1 className="text-2xl md:text-3xl font-serif text-slate-800 italic">Para mi Vida Entera</h1>
                             <div className="w-16 h-[2px] bg-[#d4af37] mx-auto mt-3"></div>
                             </div>
 
                             {/* POLAROID SECTION */}
-                            <div className="flex-1 flex flex-col md:flex-row items-center justify-center relative my-4 gap-6 md:gap-4 w-full">
+                            <div className="flex-1 flex flex-col md:flex-row items-center justify-center relative my-2 md:my-4 gap-4 md:gap-4 w-full">
                             
                             {/* Polaroid 1 */}
-                            <div className="relative group transform -rotate-3 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out w-[90%] md:w-auto max-w-[260px]">
+                            <div className="relative group transform -rotate-3 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out w-[80%] md:w-auto max-w-[260px]">
                                 <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-full md:w-[220px]">
                                 <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
                                     {photos.photo1 ? (
@@ -401,7 +402,7 @@
                             </div>
 
                             {/* Polaroid 2 */}
-                            <div className="relative group transform rotate-6 translate-y-2 md:translate-y-8 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out w-[90%] md:w-auto max-w-[260px]">
+                            <div className="relative group transform rotate-6 translate-y-2 md:translate-y-8 hover:rotate-0 hover:z-20 hover:scale-105 transition-all duration-500 ease-out w-[80%] md:w-auto max-w-[260px]">
                                 <div className="bg-white p-3 pb-8 shadow-[0_10px_20px_rgba(0,0,0,0.15)] rounded-sm border border-gray-100 w-full md:w-[220px]">
                                 <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative cursor-pointer">
                                     {photos.photo2 ? (
@@ -429,7 +430,7 @@
 
                             {/* Dedication Note */}
                             <div className="mt-auto bg-white/60 p-4 md:p-6 rounded-sm border-l-4 border-[#d4af37] shadow-sm flex-shrink-0">
-                            <p className="text-slate-600 font-serif italic text-base leading-relaxed text-center">
+                            <p className="text-slate-600 font-serif italic text-xs md:text-base leading-relaxed text-center">
                                 "Desde 2017 has sido mi refugio, mi alegría y mi mayor aventura. Gracias por elegirme cada día. Te amo infinitamente."
                             </p>
                             </div>
@@ -447,8 +448,8 @@
 
         const TimeUnit = ({ value, label }) => (
             <div className="flex flex-col items-center">
-                <span className="text-2xl md:text-3xl font-serif text-slate-800">{value}</span>
-                <span className="text-[9px] text-[#b08d55] uppercase tracking-widest">{label}</span>
+                <span className="text-xl md:text-3xl font-serif text-slate-800">{value}</span>
+                <span className="text-[8px] md:text-[9px] text-[#b08d55] uppercase tracking-widest">{label}</span>
             </div>
         );
 
